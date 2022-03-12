@@ -12,15 +12,35 @@ import {
 } from 'react-native';
 import FaIcon5 from 'react-native-vector-icons/FontAwesome5';
 
-function CheckBox() {
+interface CheckBoxProps {
+  editable: boolean;
+  changeCheckBoxHandler: (status: boolean) => void;
+}
+
+function CheckBox({editable, changeCheckBoxHandler}: CheckBoxProps) {
+  const [checked, setChecked] = useState(false);
+
+  function statusChangeHandler(status: boolean) {
+    console.log(editable);
+
+    if (editable) {
+      setChecked(status);
+      changeCheckBoxHandler(status);
+    }
+  }
+
   return (
     <View>
       <TouchableOpacity
+        onPress={() => statusChangeHandler(!checked)}
         style={[
           styles.checkbox,
-          {borderColor: 'green', backgroundColor: 'green'},
+          {
+            borderColor: checked == true ? 'green' : 'black',
+            backgroundColor: checked == true ? 'green' : 'white',
+          },
         ]}>
-        <FaIcon5 name="check" size={14} color="white" />
+        {checked == true && <FaIcon5 name="check" size={14} color="white" />}
       </TouchableOpacity>
     </View>
   );

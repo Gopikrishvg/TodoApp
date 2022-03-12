@@ -16,20 +16,39 @@ import FaIcon from 'react-native-vector-icons/FontAwesome5';
 
 const {width, height} = Dimensions.get('screen');
 
-function TodoItem({todo}: any) {
+interface TodoItemProps {
+  todo: any;
+  editable: boolean;
+  changeCheckBoxHandler: (status: boolean) => void;
+  editTodoHnandler: () => void;
+  deleteTodoHandler: () => void;
+}
+
+function TodoItem({
+  todo,
+  editable,
+  changeCheckBoxHandler,
+  editTodoHnandler,
+  deleteTodoHandler,
+}: TodoItemProps) {
   return (
     <View style={styles.todoContainer}>
-      <CheckBox />
+      <CheckBox
+        editable={editable}
+        changeCheckBoxHandler={changeCheckBoxHandler}
+      />
       <View style={styles.todoTxtContainer}>
         <View>
           <Text>{todo.note}</Text>
         </View>
       </View>
       <View style={styles.todoIconConatiner}>
-        <TouchableOpacity style={styles.iconWrapper}>
+        <TouchableOpacity style={styles.iconWrapper} onPress={editTodoHnandler}>
           <FaIcon name="edit" size={18} color="blue" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.iconWrapper}>
+        <TouchableOpacity
+          style={styles.iconWrapper}
+          onPress={deleteTodoHandler}>
           <FaIcon name="trash" size={18} color="red" />
         </TouchableOpacity>
       </View>
@@ -40,9 +59,13 @@ function TodoItem({todo}: any) {
 interface Props {
   todo: string;
   showTodo: boolean;
+  editable: boolean;
+  changeCheckBoxHandler: (status: boolean) => void;
   createTodoHandler: () => void;
   updateTodoHandler: (action: boolean) => void;
   changeTodoHandler: (todo: string) => void;
+  editTodoHnandler: () => void;
+  deleteTodoHandler: () => void;
 }
 
 const data = [
@@ -61,14 +84,24 @@ const data = [
 function TodoListScreen({
   todo,
   showTodo,
+  editable,
   createTodoHandler,
   updateTodoHandler,
   changeTodoHandler,
+  changeCheckBoxHandler,
+  editTodoHnandler,
+  deleteTodoHandler,
 }: Props) {
   function renderList({item}: any) {
     return (
       <View>
-        <TodoItem todo={item} />
+        <TodoItem
+          todo={item}
+          editable={editable}
+          changeCheckBoxHandler={changeCheckBoxHandler}
+          editTodoHnandler={editTodoHnandler}
+          deleteTodoHandler={deleteTodoHandler}
+        />
       </View>
     );
   }

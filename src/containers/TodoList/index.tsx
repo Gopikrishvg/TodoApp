@@ -11,6 +11,8 @@ type Props = NativeStackScreenProps<StackNavParams, 'TodoList'>;
 interface State {
   showTodo: boolean;
   todo: string;
+  editable: boolean;
+  isCompleted: boolean;
 }
 
 class TodoList extends React.Component<Props, State> {
@@ -19,6 +21,8 @@ class TodoList extends React.Component<Props, State> {
     this.state = {
       showTodo: false,
       todo: '',
+      editable: true,
+      isCompleted: false,
     };
   }
 
@@ -40,14 +44,27 @@ class TodoList extends React.Component<Props, State> {
     });
   };
 
+  changeCheckBoxHandler = (val: boolean) => {
+    this.setState({
+      isCompleted: val,
+    });
+  };
+
+  editTodoHnandler = () => {};
+  deleteTodoHandler = () => {};
+
   render() {
     return (
       <TodListScreen
         todo={this.state.todo}
         showTodo={this.state.showTodo}
+        editable={this.state.editable}
         createTodoHandler={this.createTodoHandler}
         changeTodoHandler={this.changeTodoHandler}
         updateTodoHandler={this.updateTodoHandler}
+        changeCheckBoxHandler={this.changeCheckBoxHandler}
+        editTodoHnandler={this.editTodoHnandler}
+        deleteTodoHandler={this.deleteTodoHandler}
       />
     );
   }
