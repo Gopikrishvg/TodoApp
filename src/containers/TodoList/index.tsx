@@ -2,38 +2,54 @@ import React from 'react';
 import {View, Text} from 'react-native';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import TodListScreen from './Screen';
 import {StackNavParams} from '../../navigation';
 
-type ScreenNavigationProps<RouteName extends keyof StackNavParams> =
-  StackNavigationProp<StackNavParams, RouteName>;
-
-type ScreenRouteProps<RouteName extends keyof StackNavParams> = RouteProp<
-  StackNavParams,
-  RouteName
->;
-
-type Props<T extends keyof StackNavParams> = {
-  route: ScreenRouteProps<T>;
-  navigation: ScreenNavigationProps<T>;
-};
+type Props = NativeStackScreenProps<StackNavParams, 'TodoList'>;
 
 interface State {
-  list: array;
+  showTodo: boolean;
+  todo: string;
 }
 
 class TodoList extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      list: [],
+      showTodo: false,
+      todo: '',
     };
   }
 
-  createClickHandler = () => {};
+  createTodoHandler = () => {
+    this.setState({
+      showTodo: true,
+    });
+  };
+
+  changeTodoHandler = (val: string) => {
+    this.setState({
+      todo: val,
+    });
+  };
+
+  updateTodoHandler = (val: boolean) => {
+    this.setState({
+      showTodo: false,
+    });
+  };
 
   render() {
-    return <TodListScreen createClickHandler={this.createClickHandler} />;
+    return (
+      <TodListScreen
+        todo={this.state.todo}
+        showTodo={this.state.showTodo}
+        createTodoHandler={this.createTodoHandler}
+        changeTodoHandler={this.changeTodoHandler}
+        updateTodoHandler={this.updateTodoHandler}
+      />
+    );
   }
 }
 
