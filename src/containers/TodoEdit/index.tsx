@@ -20,4 +20,4 @@ class TodoEdit extends React.Component<Props, State> {
   }
 }
 
-export default TodoList;
+export default TodoEdit;

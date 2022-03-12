@@ -7,6 +7,7 @@ export interface Props {
 }
 
 interface State {
+  title: string;
   todo: string;
 }
 
@@ -15,18 +16,39 @@ class TodoCreate extends React.Component<Props, State> {
     super(props);
     this.state = {
       todo: '',
+      title: '',
     };
   }
 
   todoChangeHandler = (val: string) => {
-    console.log('Val   : ', val);
     this.setState({
       todo: val,
     });
   };
 
+  todoTitleChangeHandler = (val: string) => {
+    this.setState({
+      title: val,
+    });
+  };
+
+  saveClickHandler = () => {
+    console.log(this.state);
+  };
+
+  cancelClickHandler = () => {
+    console.log(this.state);
+  };
+
   render() {
-    return <TodoCreateScreen todoChangeHandler={this.todoChangeHandler} />;
+    return (
+      <TodoCreateScreen
+        todoTitleChangeHandler={this.todoTitleChangeHandler}
+        todoChangeHandler={this.todoChangeHandler}
+        saveClickHandler={this.saveClickHandler}
+        cancelClickHandler={this.cancelClickHandler}
+      />
+    );
   }
 }
 

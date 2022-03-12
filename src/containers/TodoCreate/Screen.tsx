@@ -1,49 +1,91 @@
 import React from 'react';
-import {View, TextInput, Text, Button, StyleSheet} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-
-export interface TodoProps {
-  placeholder?: string;
-  todoChangeHandler: (txt: string) => void;
-}
-
-function TodoTextArea({placeholder, todoChangeHandler}: TodoProps) {
-  return (
-    <View style={styles.textAreaConatiner}>
-      <TextInput
-        placeholder="Enter your note ahare"
-        onChangeText={todoChangeHandler}
-      />
-    </View>
-  );
-}
+import {
+  View,
+  TextInput,
+  ScrollView,
+  Text,
+  Button,
+  StyleSheet,
+  Dimensions,
+  SafeAreaView,
+} from 'react-native';
+import {Todo} from '../../components/Todo';
 
 export interface CreateProps {
-  todoChangeHandler: (txt: string) => void;
+  todoTitleChangeHandler: (title: string) => void;
+  todoChangeHandler: (todo: string) => void;
+  saveClickHandler: () => void;
+  cancelClickHandler: () => void;
 }
 
-export default function TodoCreateScreen({todoChangeHandler}: CreateProps) {
+function TodoCreateScreen({
+  todoTitleChangeHandler,
+  todoChangeHandler,
+  saveClickHandler,
+  cancelClickHandler,
+}: CreateProps) {
   return (
     <View>
       <SafeAreaView>
-        <Text>Create</Text>
-        <TodoTextArea todoChangeHandler={todoChangeHandler} />
-        <View>
-          <Button onPress={() => null} title="Reset Text" />
-          <Button title="Save" onPress={() => null} />
-          <Button title="Cancel" onPress={() => null} />
-        </View>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <View style={styles.mainContainer}>
+            <View style={styles.headerContainer}>
+              <Text style={styles.headerText}>New Note</Text>
+              <View style={styles.bottonContainer}>
+                <Button title="Save" onPress={() => saveClickHandler()} />
+                <Button title="Cancel" onPress={() => cancelClickHandler()} />
+              </View>
+            </View>
+            <View style={styles.todoContentContainer}>
+              <Todo
+                todoTitleChangeHandler={todoTitleChangeHandler}
+                todoChangeHandler={todoChangeHandler}
+              />
+            </View>
+          </View>
+        </ScrollView>
       </SafeAreaView>
     </View>
   );
 }
 
+export default TodoCreateScreen;
+
 const styles = StyleSheet.create({
-  textAreaConatiner: {
-    width: '90%',
-    height: '60%',
-    paddingVertical: 12,
-    paddingHorizontal: 4,
-    backgroundColor: '#fff',
+  container: {
+    flex: 1,
+    backgroundColor: '#f2f2f2',
+  },
+  scrollContainer: {
+    width: '100%',
+    height: '100%',
+    flexGrow: 1,
+    backgroundColor: '#f2f2f2',
+  },
+  mainContainer: {
+    flex: 1,
+    paddingVertical: 6,
+  },
+  headerContainer: {
+    width: '100%',
+    height: 56,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 2,
+    backgroundColor: '#e5e5e5',
+  },
+  headerText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  todoContentContainer: {
+    alignItems: 'center',
+  },
+  bottonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
   },
 });
