@@ -10,9 +10,10 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
+import FaIcon from 'react-native-vector-icons/FontAwesome5';
 import Todo from '../../components/Todo';
 import CheckBox from '../../components/CheckBox';
-import FaIcon from 'react-native-vector-icons/FontAwesome5';
+import {todo} from '../../store/reducers';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -39,7 +40,7 @@ function TodoItem({
       />
       <View style={styles.todoTxtContainer}>
         <View>
-          <Text>{todo.note}</Text>
+          <Text>{todo.title}</Text>
         </View>
       </View>
       <View style={styles.todoIconConatiner}>
@@ -58,35 +59,24 @@ function TodoItem({
 
 interface Props {
   todo: string;
+  todos: todo[] | null;
   showTodo: boolean;
   editable: boolean;
   changeCheckBoxHandler: (status: boolean) => void;
   createTodoHandler: () => void;
-  updateTodoHandler: (action: boolean) => void;
+  updateTodoSubmitHandler: (action: boolean) => void;
   changeTodoHandler: (todo: string) => void;
   editTodoHnandler: () => void;
   deleteTodoHandler: () => void;
 }
 
-const data = [
-  {
-    id: 1,
-    note: 'this is sample node',
-    completed: true,
-  },
-  {
-    id: 2,
-    note: 'this is sample node with diddefnt value test testing for multiple line',
-    completed: true,
-  },
-];
-
 function TodoListScreen({
   todo,
+  todos,
   showTodo,
   editable,
   createTodoHandler,
-  updateTodoHandler,
+  updateTodoSubmitHandler,
   changeTodoHandler,
   changeCheckBoxHandler,
   editTodoHnandler,
@@ -117,7 +107,7 @@ function TodoListScreen({
             </View>
           </View>
           <View style={styles.contentContainer}>
-            <FlatList data={data} renderItem={renderList} />
+            <FlatList data={todos} renderItem={renderList} />
           </View>
         </View>
 
@@ -127,7 +117,7 @@ function TodoListScreen({
             todo={todo}
             showTodo={showTodo}
             todoChangeHandler={changeTodoHandler}
-            todoUpdateHandler={updateTodoHandler}
+            todoUpdateHandler={updateTodoSubmitHandler}
           />
         </View>
       </SafeAreaView>
