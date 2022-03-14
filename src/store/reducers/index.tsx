@@ -20,6 +20,9 @@ interface State {
   updateLoading: boolean;
   updateStatus: boolean;
   updateError: boolean;
+  deleteLoading: boolean;
+  deleteStatus: boolean;
+  deleteError: boolean;
   errorMsg: string | null;
 }
 
@@ -63,6 +66,19 @@ interface updateTodoActionFailure {
   errorMsg: string;
 }
 
+interface deleteTodoAction {
+  type: ActionType.DELETE_TODO;
+}
+
+interface deleteTodoActionSuccess {
+  type: ActionType.DELETE_TODO_SUCCESS;
+}
+
+interface deleteTodoActionFailure {
+  type: ActionType.DELETE_TODO_FAILURE;
+  errorMsg: string;
+}
+
 const initialState = {
   todos: null,
   getLoading: false,
@@ -74,6 +90,9 @@ const initialState = {
   updateLoading: false,
   updateStatus: false,
   updateError: false,
+  deleteLoading: false,
+  deleteStatus: false,
+  deleteError: false,
   errorMsg: null,
 };
 
@@ -86,7 +105,10 @@ type Action =
   | postTodoActionFailure
   | updateTodoAction
   | updateTodoActionSuccess
-  | updateTodoActionFailure;
+  | updateTodoActionFailure
+  | deleteTodoAction
+  | deleteTodoActionSuccess
+  | deleteTodoActionFailure;
 
 function todoReducer(state: State = initialState, action: Action): State {
   switch (action.type) {
@@ -163,6 +185,31 @@ function todoReducer(state: State = initialState, action: Action): State {
         updateLoading: false,
         updateStatus: false,
         updateError: true,
+        errorMsg: action.errorMsg,
+      };
+    }
+    case ActionType.DELETE_TODO: {
+      return {
+        ...state,
+        deleteLoading: true,
+        deleteStatus: false,
+        deleteError: false,
+      };
+    }
+    case ActionType.DELETE_TODO_SUCCESS: {
+      return {
+        ...state,
+        deleteLoading: false,
+        deleteStatus: true,
+        deleteError: false,
+      };
+    }
+    case ActionType.DELETE_TODO_FAILURE: {
+      return {
+        ...state,
+        deleteLoading: false,
+        deleteStatus: false,
+        deleteError: true,
         errorMsg: action.errorMsg,
       };
     }

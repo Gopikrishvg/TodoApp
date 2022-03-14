@@ -22,7 +22,7 @@ interface TodoItemProps {
   editable: boolean;
   changeCheckBoxHandler: (status: boolean) => void;
   editTodoHnandler: (id: number) => void;
-  deleteTodoHandler: () => void;
+  deleteTodoHandler: (id: number) => void;
 }
 
 function TodoItem({
@@ -51,7 +51,7 @@ function TodoItem({
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.iconWrapper}
-          onPress={deleteTodoHandler}>
+          onPress={() => deleteTodoHandler(todo.id)}>
           <FaIcon name="trash" size={18} color="red" />
         </TouchableOpacity>
       </View>
@@ -69,7 +69,7 @@ interface Props {
   updateTodoSubmitHandler: (action: boolean) => void;
   changeTodoHandler: (todo: string) => void;
   editTodoHnandler: (id: number) => void;
-  deleteTodoHandler: () => void;
+  deleteTodoHandler: (id: number) => void;
 }
 
 function TodoListScreen({

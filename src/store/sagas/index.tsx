@@ -1,6 +1,11 @@
 import {fork, put, takeEvery, takeLatest} from 'redux-saga/effects';
 import {ActionType, getTodo} from '../actions';
-import {getRequest, postRequest, putRequest} from '../../utils/Requests';
+import {
+  deleteRequest,
+  getRequest,
+  postRequest,
+  putRequest,
+} from '../../utils/Requests';
 
 export interface ResponseGenerator {
   config?: any;
@@ -88,10 +93,36 @@ function* postTodoData(action: any) {
   }
 }
 
+function* deleteTodoData(action: any) {
+  try {
+    const response: ResponseGenerator = yield deleteRequest(
+      `https://jsonplaceholder.typicode.com/todos/${action.id}`,
+    );
+    console.log('response:==============> ', response.data);
+
+    if (response.status == 200) {
+      yield put({
+        type: ActionType.DELETE_TODO_SUCCESS,
+        result: response.data,
+      });
+    } else {
+      yield put({
+        type: ActionType.DELETE_TODO_FAILURE,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    yield put({
+      type: ActionType.DELETE_TODO_FAILURE,
+    });
+  }
+}
+
 function* todoSaga() {
   yield takeEvery(ActionType.GET_TODO, getTodoData);
   yield takeLatest(ActionType.POST_TODO, postTodoData);
   yield takeLatest(ActionType.UPDATE_TODO, updateTodoData);
+  yield takeLatest(ActionType.DELETE_TODO, deleteTodoData);
 }
 
 export default function* rootSaga() {

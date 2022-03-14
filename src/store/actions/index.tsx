@@ -28,9 +28,10 @@ export function createTodo(data: CreateTodo) {
   };
 }
 
-export function updateTodo(data: CreateTodo) {
+export function updateTodo(data: CreateTodo, id: number) {
   return {
     type: ActionType.UPDATE_TODO,
     data,
+    id,
   };
 }

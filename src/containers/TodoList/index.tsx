@@ -21,12 +21,14 @@ export interface CreateTodo {
 interface StateProps {
   todos: todo[] | null;
   postStatus: boolean;
+  updateStatus: boolean;
 }
 
 interface DispatchProps {
   onGetTodo: () => void;
   onCreateTodo: (data: CreateTodo) => void;
   onUpdateTodo: (data: CreateTodo, id: number | undefined) => void;
+  onDeleteTodo: (id: number | undefined) => void;
 }
 
 type Props = StateProps & DispatchProps & NavProps;
@@ -101,7 +103,6 @@ class TodoList extends React.Component<Props, State> {
   };
 
   editTodoHnandler = (id: number) => {
-    console.log('----->', id);
     const data = this.props.todos?.find(item => item.id == id);
     this.setState({
       showTodo: true,
@@ -110,7 +111,9 @@ class TodoList extends React.Component<Props, State> {
       updateId: data?.id,
     });
   };
-  deleteTodoHandler = () => {};
+  deleteTodoHandler = (id: number) => {
+    this.props.onDeleteTodo(id);
+  };
 
   componentDidMount = () => {
     this.props.onGetTodo();
@@ -120,6 +123,12 @@ class TodoList extends React.Component<Props, State> {
     if (
       this.props.postStatus == true &&
       this.props.postStatus !== prevProps.postStatus
+    ) {
+      this.props.onGetTodo();
+    }
+    if (
+      this.props.updateStatus == true &&
+      this.props.updateStatus !== prevProps.updateStatus
     ) {
       this.props.onGetTodo();
     }
@@ -147,6 +156,7 @@ function mapStateToProps(state: RootState) {
   return {
     todos: state.todos.todos,
     postStatus: state.todos.postStatus,
+    updateStatus: state.todos.updateStatus,
   };
 }
 
@@ -157,6 +167,8 @@ function mapDispatchToProps(dispatch: AppDispatch) {
       dispatch({type: ActionType.POST_TODO, data}),
     onUpdateTodo: (data: CreateTodo, id: number | undefined) =>
       dispatch({type: ActionType.UPDATE_TODO, data, id}),
+    onDeleteTodo: (id: number | undefined) =>
+      dispatch({type: ActionType.DELETE_TODO, id}),
   };
 }
 
