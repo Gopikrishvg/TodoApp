@@ -11,9 +11,15 @@ export interface todo {
 
 interface State {
   todos: todo[] | null;
-  loading: boolean;
-  status: boolean;
-  error: boolean;
+  getLoading: boolean;
+  getStatus: boolean;
+  getError: boolean;
+  postLoading: boolean;
+  postStatus: boolean;
+  postError: boolean;
+  updateLoading: boolean;
+  updateStatus: boolean;
+  updateError: boolean;
   errorMsg: string | null;
 }
 
@@ -31,41 +37,132 @@ interface getTodoActionFailure {
   errorMsg: string;
 }
 
+interface postTodoAction {
+  type: ActionType.POST_TODO;
+}
+
+interface postTodoActionSuccess {
+  type: ActionType.POST_TODO_SUCCESS;
+}
+
+interface postTodoActionFailure {
+  type: ActionType.POST_TODO_FAILURE;
+  errorMsg: string;
+}
+
+interface updateTodoAction {
+  type: ActionType.UPDATE_TODO;
+}
+
+interface updateTodoActionSuccess {
+  type: ActionType.UPDATE_TODO_SUCCESS;
+}
+
+interface updateTodoActionFailure {
+  type: ActionType.UPDATE_TODO_FAILURE;
+  errorMsg: string;
+}
+
 const initialState = {
   todos: null,
-  loading: false,
-  status: false,
-  error: false,
+  getLoading: false,
+  getStatus: false,
+  getError: false,
+  postLoading: false,
+  postStatus: false,
+  postError: false,
+  updateLoading: false,
+  updateStatus: false,
+  updateError: false,
   errorMsg: null,
 };
 
-type Action = getTodoAction | getTodoActionSuccess | getTodoActionFailure;
+type Action =
+  | getTodoAction
+  | getTodoActionSuccess
+  | getTodoActionFailure
+  | postTodoAction
+  | postTodoActionSuccess
+  | postTodoActionFailure
+  | updateTodoAction
+  | updateTodoActionSuccess
+  | updateTodoActionFailure;
 
 function todoReducer(state: State = initialState, action: Action): State {
   switch (action.type) {
     case ActionType.GET_TODO: {
       return {
         ...state,
-        loading: true,
-        status: false,
-        error: false,
+        getLoading: true,
+        getStatus: false,
+        getError: false,
       };
     }
     case ActionType.GET_TODO_SUCCESS: {
       return {
         ...state,
-        loading: false,
-        status: true,
-        error: false,
+        getLoading: false,
+        getStatus: true,
+        getError: false,
         todos: action.result,
       };
     }
     case ActionType.GET_TODO_FAILURE: {
       return {
         ...state,
-        loading: false,
-        status: false,
-        error: true,
+        getLoading: false,
+        getStatus: false,
+        getError: true,
+        errorMsg: action.errorMsg,
+      };
+    }
+    case ActionType.POST_TODO: {
+      return {
+        ...state,
+        postLoading: true,
+        postStatus: false,
+        postError: false,
+      };
+    }
+    case ActionType.POST_TODO_SUCCESS: {
+      return {
+        ...state,
+        postLoading: false,
+        postStatus: true,
+        postError: false,
+      };
+    }
+    case ActionType.POST_TODO_FAILURE: {
+      return {
+        ...state,
+        postLoading: false,
+        postStatus: false,
+        postError: true,
+        errorMsg: action.errorMsg,
+      };
+    }
+    case ActionType.UPDATE_TODO: {
+      return {
+        ...state,
+        updateLoading: true,
+        updateStatus: false,
+        updateError: false,
+      };
+    }
+    case ActionType.UPDATE_TODO_SUCCESS: {
+      return {
+        ...state,
+        updateLoading: false,
+        updateStatus: true,
+        updateError: false,
+      };
+    }
+    case ActionType.UPDATE_TODO_FAILURE: {
+      return {
+        ...state,
+        updateLoading: false,
+        updateStatus: false,
+        updateError: true,
         errorMsg: action.errorMsg,
       };
     }

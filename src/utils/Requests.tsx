@@ -52,7 +52,7 @@ async function postRequest(url: string, params: any) {
 }
 
 async function putRequest(url: string, params: any) {
-  console.log('put request...');
+  console.log('put request...', url, params);
   let response;
   const header = {
     Accept: 'application/json',

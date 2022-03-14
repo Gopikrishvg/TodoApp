@@ -1,6 +1,6 @@
-import {all, put, takeEvery} from 'redux-saga/effects';
+import {fork, put, takeEvery, takeLatest} from 'redux-saga/effects';
 import {ActionType, getTodo} from '../actions';
-import {getRequest} from '../../utils/Requests';
+import {getRequest, postRequest, putRequest} from '../../utils/Requests';
 
 export interface ResponseGenerator {
   config?: any;
@@ -36,8 +36,64 @@ function* getTodoData(action: any) {
   }
 }
 
-function* rootSaga() {
-  yield all([takeEvery(ActionType.GET_TODO, getTodoData)]);
+function* updateTodoData(action: any) {
+  try {
+    const response: ResponseGenerator = yield putRequest(
+      `https://jsonplaceholder.typicode.com/todos/${action.id}`,
+      action.data,
+    );
+    console.log('response:==============> ', response.data);
+
+    if (response.status == 200) {
+      yield put({
+        type: ActionType.UPDATE_TODO_SUCCESS,
+        result: response.data,
+      });
+    } else {
+      yield put({
+        type: ActionType.UPDATE_TODO_FAILURE,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    yield put({
+      type: ActionType.UPDATE_TODO_FAILURE,
+    });
+  }
 }
 
-export default rootSaga;
+function* postTodoData(action: any) {
+  try {
+    const response: ResponseGenerator = yield postRequest(
+      'https://jsonplaceholder.typicode.com/todos',
+      action.data,
+    );
+    console.log('response:==============> ', response.data);
+
+    if (response.status == 201) {
+      yield put({
+        type: ActionType.POST_TODO_SUCCESS,
+        result: response.data,
+      });
+    } else {
+      yield put({
+        type: ActionType.POST_TODO_FAILURE,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    yield put({
+      type: ActionType.POST_TODO_FAILURE,
+    });
+  }
+}
+
+function* todoSaga() {
+  yield takeEvery(ActionType.GET_TODO, getTodoData);
+  yield takeLatest(ActionType.POST_TODO, postTodoData);
+  yield takeLatest(ActionType.UPDATE_TODO, updateTodoData);
+}
+
+export default function* rootSaga() {
+  yield fork(todoSaga);
+}

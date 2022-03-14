@@ -12,7 +12,7 @@ const Stack = createNativeStackNavigator<StackNavParams>();
 export default function RootNavigation() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name="TodoList" component={TodoList} />
       </Stack.Navigator>
     </NavigationContainer>

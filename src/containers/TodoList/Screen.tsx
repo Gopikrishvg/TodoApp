@@ -18,10 +18,10 @@ import {todo} from '../../store/reducers';
 const {width, height} = Dimensions.get('screen');
 
 interface TodoItemProps {
-  todo: any;
+  todo: todo;
   editable: boolean;
   changeCheckBoxHandler: (status: boolean) => void;
-  editTodoHnandler: () => void;
+  editTodoHnandler: (id: number) => void;
   deleteTodoHandler: () => void;
 }
 
@@ -44,7 +44,9 @@ function TodoItem({
         </View>
       </View>
       <View style={styles.todoIconConatiner}>
-        <TouchableOpacity style={styles.iconWrapper} onPress={editTodoHnandler}>
+        <TouchableOpacity
+          style={styles.iconWrapper}
+          onPress={() => editTodoHnandler(todo.id)}>
           <FaIcon name="edit" size={18} color="blue" />
         </TouchableOpacity>
         <TouchableOpacity
@@ -58,7 +60,7 @@ function TodoItem({
 }
 
 interface Props {
-  todo: string;
+  todo: string | undefined;
   todos: todo[] | null;
   showTodo: boolean;
   editable: boolean;
@@ -66,7 +68,7 @@ interface Props {
   createTodoHandler: () => void;
   updateTodoSubmitHandler: (action: boolean) => void;
   changeTodoHandler: (todo: string) => void;
-  editTodoHnandler: () => void;
+  editTodoHnandler: (id: number) => void;
   deleteTodoHandler: () => void;
 }
 
@@ -107,7 +109,11 @@ function TodoListScreen({
             </View>
           </View>
           <View style={styles.contentContainer}>
-            <FlatList data={todos} renderItem={renderList} />
+            <FlatList
+              data={todos}
+              renderItem={renderList}
+              contentContainerStyle={{paddingBottom: 20}}
+            />
           </View>
         </View>
 
@@ -161,7 +167,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     width: '100%',
-    height: height * 0.74,
+    height: height * 0.78,
     paddingHorizontal: 16,
     paddingVertical: 2,
     backgroundColor: '#f2f2f2',

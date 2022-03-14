@@ -16,7 +16,7 @@ const {width, height} = Dimensions.get('screen');
 
 export interface TodoProps {
   title: string;
-  todo: string;
+  todo: string | undefined;
   showTodo: boolean;
   todoChangeHandler: (todo: string) => void;
   todoUpdateHandler: (action: boolean) => void;
