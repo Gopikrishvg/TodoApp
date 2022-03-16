@@ -7,47 +7,37 @@ interface CreateTodo {
   completed: boolean;
 }
 
-interface CreateTodo1 {
-  title: string | undefined;
-  userId: number;
-  id: number;
-  completed: boolean;
-}
+const requestObj = {
+  userId: 1,
+  title: 'test',
+  completed: true,
+};
+
+const responseObj = {
+  userId: 1,
+  title: 'test',
+  completed: false,
+  id: 201,
+};
 
 afterEach(() => {
   mockAxios.reset();
 });
 
-const ServerProxy = async (clientMessage: CreateTodo) => {
+const postAxios = async (clientMessage: CreateTodo) => {
   const serverData = await axios.post(
     'https://jsonplaceholder.typicode.com/todos',
     {data: clientMessage},
   );
-
   return serverData.data;
 };
 
-describe('UserService', () => {
-  it('Todo should call axios ', async () => {
-    const message = {
-      userId: 1,
-      title: 'test',
-      completed: false,
-    };
+const postAxiosMock = jest.fn(() => Promise.resolve({data: responseObj}));
 
-    const promise = ServerProxy(message);
-
-    expect(mockAxios.post).toHaveBeenCalledWith(
-      'https://jsonplaceholder.typicode.com/todos',
-      {
-        data: message,
-      },
-    );
-
-    const responseObj = {...message, id: 201};
-    mockAxios.mockResponse({data: responseObj});
-
-    const result = await promise;
-    expect(result.title).toEqual('test');
-  });
+it('cakk axios and response', async () => {
+  const res = await postAxios(requestObj);
+  console.log('-->', res);
+  postAxiosMock();
+  expect(res.id).toEqual(responseObj.id);
+  expect(postAxiosMock).toHaveBeenCalled();
 });
