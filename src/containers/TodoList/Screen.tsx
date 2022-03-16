@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     width: '100%',
-    height: height * 0.78,
+    height: height * 0.82,
     paddingHorizontal: 16,
     paddingVertical: 2,
     backgroundColor: '#f2f2f2',

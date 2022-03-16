@@ -31,9 +31,9 @@ interface DispatchProps {
   onDeleteTodo: (id: number | undefined) => void;
 }
 
-type Props = StateProps & DispatchProps & NavProps;
+export type Props = StateProps & DispatchProps & NavProps;
 
-interface State {
+export interface State {
   showTodo: boolean;
   todo: string | undefined;
   editable: boolean;
