@@ -18,13 +18,13 @@ afterEach(() => {
   mockAxios.reset();
 });
 
-const UppercaseProxy = async (clientMessage: CreateTodo) => {
+const ServerProxy = async (clientMessage: CreateTodo) => {
   const serverData = await axios.post(
     'https://jsonplaceholder.typicode.com/todos',
     {data: clientMessage},
   );
 
-  return serverData.data.toUpperCase();
+  return serverData.data;
 };
 
 describe('UserService', () => {
@@ -35,7 +35,7 @@ describe('UserService', () => {
       completed: false,
     };
 
-    const promise = UppercaseProxy(message);
+    const promise = ServerProxy(message);
 
     expect(mockAxios.post).toHaveBeenCalledWith(
       'https://jsonplaceholder.typicode.com/todos',
